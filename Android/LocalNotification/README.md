@@ -2,19 +2,19 @@ The Android implementation for local notification uses a similar interface as th
 To use this plugin, you need to perform the following steps:
 
 1. Copy the LocalNotification.js file to your 'www' folder and include it in your index.html
-2. Create a package com.phonegap.plugin.localnotification
+2. Create a package org.apache.cordova.plugins
 3. Copy the .java files into this package
 4. Fix the import in AlarmReceiver.java around line 67 where R.drawable.ic_launcher is referenced so it matches an icon in your project
-5. Update your res/xml/plugins.xml file with the following line:
+5. Update your res/xml/Config.xml file with the following line:
 
-        <plugin name="LocalNotification" value="com.phonegap.plugin.localnotification.LocalNotification" />
+        <plugin name="LocalNotification" value="org.apache.cordova.plugins.LocalNotification"/>
 
 6. Add the following fragment in the AndroidManifest.xml inside the &lt;application&gt; tag:
 
-        <receiver android:name="com.phonegap.plugin.localnotification.AlarmReceiver" >
+        <receiver android:name="org.apache.cordova.plugins.AlarmReceiver" >
         </receiver>
 		
-        <receiver android:name="com.phonegap.plugin.localnotification.AlarmRestoreOnBoot" >
+        <receiver android:name="org.apache.cordova.plugins.AlarmRestoreOnBoot" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -31,15 +31,14 @@ To use this plugin, you need to perform the following steps:
                         function appReady() {
                         	console.log("Device ready");
 				
-                        	if (typeof plugins !== "undefined") {
-                        		plugins.localNotification.add({
-                        			date : new Date(),
-                        			message : "Phonegap - Local Notification\r\nSubtitle comes after linebreak",
-                        			ticker : "This is a sample ticker text",
-                        			repeatDaily : false,
-                        			id : 4
-                			});
-                		}
+                        	var LN = cordova.require("cordova/plugin/LocalNotification");
+				LN.add({
+				    date: new Date(2012, 10, 11, 15, 20, 0, 0),
+				    message: "ALARM 1 \r\nSubtitle comes after linebreak",
+				    ticker: "This is a sample ticker text",
+				    repeatDaily: false,
+				    id: 1
+				});
         		}
 			
                 	document.addEventListener("deviceready", appReady, false);
@@ -47,8 +46,8 @@ To use this plugin, you need to perform the following steps:
 		
 8. You can use the following commands:
 
-	- plugins.localNotification.add({ date: new Date(), message: 'This is an Android alarm using the statusbar', id: 123 });
-	- plugins.localNotification.cancel(123); 
-	- plugins.localNotification.cancelAll();
+	- LN.add({ date: new Date(), message: 'This is an Android alarm using the statusbar', id: 123 });
+	- LN.cancel(123); 
+	- LN.cancelAll();
 		
 9. Enjoy. Daniel
